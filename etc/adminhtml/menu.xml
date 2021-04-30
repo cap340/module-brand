@@ -3,6 +3,8 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Cap_Brand::list" title="Brands" translate="title" module="Cap_Brand" parent="Magento_Backend::content_elements"
-             sortOrder="999" dependsOnModule="Cap_Brand" action="cap_brand/brand" resource="Cap_Brand::list"/>
+             sortOrder="900" dependsOnModule="Cap_Brand" action="cap_brand/brand" resource="Cap_Brand::list"/>
+        <add id="Cap_Brand::products" title="Products" translate="title" module="Cap_Brand" parent="Magento_Backend::content_elements"
+             sortOrder="910" dependsOnModule="Cap_Brand" action="cap_brand/category/linkproducts" resource="Cap_Brand::products"/>
     </menu>
 </config>

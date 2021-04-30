@@ -53,11 +53,10 @@ class Save extends Action
             }
 
             //print_r($data);
-            // Fix Image uploader array to string conversion on model save
-            if (isset($data['small_image'])) {
-                // Image uploader return array with 'type', 'name', 'url'...
-                $data['small_image'] = $data['small_image'][0]['url'];
-            }
+//            if (isset($data['small_image'])) {
+//                // Image uploader return array with 'type', 'name', 'url'...
+//                $data['small_image'] = $data['small_image'][0]['url'];
+//            }
 
             $model->setData($data);
 

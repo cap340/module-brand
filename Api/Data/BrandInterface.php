@@ -7,7 +7,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 interface BrandInterface extends ExtensibleDataInterface
 {
-    const ID = 'brand_id';
+    const BRAND_ID = 'brand_id';
     const TITLE = 'title';
     const CATEGORY_ID = 'category_id';
     const ATTRIBUTE_OPTION = 'attribute_option';
@@ -18,19 +18,19 @@ interface BrandInterface extends ExtensibleDataInterface
     const UPDATE_TIME = 'update_time';
 
     /**
-     * Get id
+     * Get brand id
      * @return string|null
      */
-    public function getId();
+    public function getBrandId();
 
     /**
-     * Set id
+     * Set brand id
      *
-     * @param string $id
+     * @param string $brandId
      *
      * @return BrandInterface
      */
-    public function setId($id);
+    public function setBrandId($brandId);
 
     /**
      * Get title

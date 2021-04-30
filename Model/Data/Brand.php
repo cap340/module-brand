@@ -9,24 +9,24 @@ use Cap\Brand\Api\Data\BrandInterface;
 class Brand extends \Magento\Framework\Api\AbstractExtensibleObject implements BrandInterface
 {
     /**
-     * Get id
+     * Get brand id
      * @return string|null
      */
-    public function getId()
+    public function getBrandId()
     {
-        return $this->_get(self::ID);
+        return $this->_get(self::BRAND_ID);
     }
 
     /**
-     * Set id
+     * Set brand id
      *
-     * @param string $id
+     * @param string $brandId
      *
      * @return BrandInterface
      */
-    public function setId($id)
+    public function setBrandId($brandId)
     {
-        return $this->setData(self::ID, $id);
+        return $this->setData(self::BRAND_ID, $brandId);
     }
 
     /**
