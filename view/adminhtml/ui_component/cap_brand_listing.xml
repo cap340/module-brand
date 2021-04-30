@@ -1,22 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">cap_brand_listing.cap_brand_listing_data_source</item>
         </item>
     </argument>
     <settings>
-        <buttons>
-            <button name="add">
-                <url path="*/*/new"/>
-                <class>primary</class>
-                <label translate="true">Add New Brand</label>
-            </button>
-        </buttons>
         <spinner>cap_brand_columns</spinner>
         <deps>
             <dep>cap_brand_listing.cap_brand_listing_data_source</dep>
         </deps>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">Add new Brand</label>
+            </button>
+        </buttons>
     </settings>
     <dataSource name="cap_brand_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
@@ -25,83 +26,43 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Cap_Brand::brand</aclResource>
-        <dataProvider class="Cap\Brand\Ui\Component\DataProvider" name="cap_brand_listing_data_source">
+        <aclResource>Cap_Brand::list</aclResource>
+        <dataProvider name="cap_brand_listing_data_source"
+                      class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>brand_id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
+    <!-- todo: mass action delete -->
     <listingToolbar name="listing_top">
         <settings>
             <sticky>true</sticky>
         </settings>
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
-        <filterSearch name="fulltext"/>
-        <filters name="listing_filters">
-            <settings>
-                <templates>
-                    <filters>
-                        <select>
-                            <param name="template" xsi:type="string">ui/grid/filters/elements/ui-select</param>
-                            <param name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</param>
-                        </select>
-                    </filters>
-                </templates>
-            </settings>
-            <filterSelect name="store_id" provider="${ $.parentName }">
-                <settings>
-                    <captionValue>0</captionValue>
-                    <options class="Cap\Brand\Ui\Component\Listing\Column\Options"/>
-                    <label translate="true">Store View</label>
-                    <dataScope>store_id</dataScope>
-                    <imports>
-                        <link name="visible">ns = ${ $.ns }, index = ${ $.index }:visible</link>
-                    </imports>
-                </settings>
-            </filterSelect>
-        </filters>
-        <massaction name="listing_massaction">
-            <action name="delete">
-                <settings>
-                    <confirm>
-                        <message translate="true">Are you sure you want to delete selected items?</message>
-                        <title translate="true">Delete items</title>
-                    </confirm>
-                    <url path="cap_brand/brand/massDelete"/>
-                    <type>delete</type>
-                    <label translate="true">Delete</label>
-                </settings>
-            </action>
-            <action name="edit">
-                <settings>
-                    <callback>
-                        <target>editSelected</target>
-                        <provider>cap_brand_listing.cap_brand_listing.cap_brand_columns_editor</provider>
-                    </callback>
-                    <type>edit</type>
-                    <label translate="true">Edit</label>
-                </settings>
-            </action>
-        </massaction>
+        <filters name="listing_filters"/>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="cap_brand_columns">
         <settings>
             <editorConfig>
+                <param name="selectProvider" xsi:type="string">
+                    cap_brand_listing.cap_brand_listing.cap_brand_columns.ids
+                </param>
+                <param name="enabled" xsi:type="boolean">true</param>
+                <param name="indexField" xsi:type="string">brand_id</param>
                 <param name="clientConfig" xsi:type="array">
-                    <item name="saveUrl" xsi:type="url" path="cap_brand/brand/inlineEdit"/>
+                    <item name="saveUrl" xsi:type="url" path="cap_brand/Brand/inlineEdit"/>
                     <item name="validateBeforeSave" xsi:type="boolean">false</item>
                 </param>
-                <param name="indexField" xsi:type="string">brand_id</param>
-                <param name="enabled" xsi:type="boolean">true</param>
-                <param name="selectProvider" xsi:type="string">cap_brand_listing.cap_brand_listing.cap_brand_columns.ids</param>
             </editorConfig>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">cap_brand_listing.cap_brand_listing.cap_brand_columns_editor</item>
+                    <item name="provider" xsi:type="string">
+                        cap_brand_listing.cap_brand_listing.cap_brand_columns_editor
+                    </item>
                     <item name="target" xsi:type="string">startEdit</item>
                     <item name="params" xsi:type="array">
                         <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
@@ -125,72 +86,53 @@
         <column name="title">
             <settings>
                 <filter>text</filter>
-                <editor>
-                    <validation>
-                        <rule name="required-entry" xsi:type="boolean">true</rule>
-                    </validation>
-                    <editorType>text</editorType>
-                </editor>
                 <label translate="true">Title</label>
-            </settings>
-        </column>
-        <column name="identifier">
-            <settings>
-                <filter>text</filter>
                 <editor>
+                    <editorType>text</editorType>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
-                        <rule name="no-marginal-whitespace" xsi:type="boolean">true</rule>
                     </validation>
-                    <editorType>text</editorType>
                 </editor>
-                <label translate="true">Identifier</label>
             </settings>
         </column>
-        <column name="category_id">
+        <!-- todo: thumbnail & fix image uploader -->
+        <column name="small_image">
             <settings>
-                <filter>text</filter>
+                <label translate="true">Small Image</label>
                 <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">false</rule>
+                    </validation>
+                </editor>
+            </settings>
+        </column>
+        <column name="category_id" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Cap\Brand\Model\Brand\Source\Category"/>
+                <filter>select</filter>
+                <editor>
+                    <editorType>select</editorType>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
-                        <rule name="no-marginal-whitespace" xsi:type="boolean">true</rule>
                     </validation>
-                    <editorType>text</editorType>
                 </editor>
+                <dataType>select</dataType>
                 <label translate="true">Category</label>
             </settings>
         </column>
-        <column name="attribute_option">
+        <column name="attribute_option" component="Magento_Ui/js/grid/columns/select">
             <settings>
-                <filter>text</filter>
+                <options class="Cap\Brand\Model\Brand\Source\AttributeOption"/>
+                <filter>select</filter>
                 <editor>
+                    <editorType>select</editorType>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
-                        <rule name="no-marginal-whitespace" xsi:type="boolean">true</rule>
                     </validation>
-                    <editorType>text</editorType>
                 </editor>
+                <dataType>select</dataType>
                 <label translate="true">Attribute</label>
-            </settings>
-        </column>
-        <column name="small_image">
-            <settings>
-                <filter>text</filter>
-                <editor>
-                    <validation>
-                        <rule name="required-entry" xsi:type="boolean">true</rule>
-                        <rule name="no-marginal-whitespace" xsi:type="boolean">true</rule>
-                    </validation>
-                    <editorType>text</editorType>
-                </editor>
-                <label translate="true">Small Image</label>
-            </settings>
-        </column>
-        <column name="store_id" class="Magento\Store\Ui\Component\Listing\Column\Store">
-            <settings>
-                <label translate="true">Store View</label>
-                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
-                <sortable>false</sortable>
             </settings>
         </column>
         <column name="is_active" component="Magento_Ui/js/grid/columns/select">
@@ -215,14 +157,16 @@
                 <label translate="true">Featured</label>
             </settings>
         </column>
-        <column name="creation_time" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+        <column name="creation_time" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date">
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
                 <label translate="true">Created</label>
             </settings>
         </column>
-        <column name="update_time" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+        <column name="update_time" class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date">
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
@@ -232,6 +176,8 @@
         <actionsColumn name="actions" class="Cap\Brand\Ui\Component\Listing\Column\BrandActions">
             <settings>
                 <indexField>brand_id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>107</resizeDefaultWidth>
             </settings>
         </actionsColumn>
     </columns>

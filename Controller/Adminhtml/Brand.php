@@ -1,32 +1,27 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Controller\Adminhtml;
 
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\Registry;
+use Magento\Backend\App\Action;
 
-abstract class Brand extends \Magento\Backend\App\Action
+abstract class Brand extends Action
 {
-    /**
-     * Authorization level of a basic admin session
-     *
-     * @see _isAllowed()
-     */
-    const ADMIN_RESOURCE = 'Cap_Brand::brand';
+    const ADMIN_RESOURCE = 'Cap_Brand::top_level';
 
     /**
-     * Core registry
-     *
-     * @var Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @param Context $context
-     * @param Registry $coreRegistry
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(Context $context, Registry $coreRegistry)
-    {
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry
+    ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -35,15 +30,13 @@ abstract class Brand extends \Magento\Backend\App\Action
      * Init page
      *
      * @param \Magento\Backend\Model\View\Result\Page $resultPage
-     *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function initPage($resultPage)
+    public function initPage($resultPage)
     {
-        $resultPage->setActiveMenu('Cap_Brand::cap_brand')
-                   ->addBreadcrumb(__('Cap'), __('Cap'))
-                   ->addBreadcrumb(__('Brands'), __('Brands'));
-
+        $resultPage->setActiveMenu(self::ADMIN_RESOURCE)
+            ->addBreadcrumb(__('Cap'), __('Cap'))
+            ->addBreadcrumb(__('Brand'), __('Brand'));
         return $resultPage;
     }
 }

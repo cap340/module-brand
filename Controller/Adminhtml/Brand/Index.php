@@ -1,14 +1,13 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Controller\Adminhtml\Brand;
 
-use Cap\Brand\Controller\Adminhtml\Brand;
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index extends Brand implements HttpGetActionInterface
+class Index extends Action
 {
     /**
      * @var PageFactory
@@ -16,17 +15,17 @@ class Index extends Brand implements HttpGetActionInterface
     protected $resultPageFactory;
 
     /**
+     * Constructor
+     *
      * @param Context $context
-     * @param Registry $coreRegistry
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
-        Registry $coreRegistry,
         PageFactory $resultPageFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context, $coreRegistry);
+        parent::__construct($context);
     }
 
     /**
@@ -36,12 +35,8 @@ class Index extends Brand implements HttpGetActionInterface
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $this->initPage($resultPage)->getConfig()->getTitle()->prepend(__('Brands'));
-
-        $dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);
-        $dataPersistor->clear('cap_brand');
+        $resultPage->getConfig()->getTitle()->prepend(__('Brands'));
 
         return $resultPage;
     }

@@ -1,53 +1,58 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Api;
 
-/**
- * Brand CRUD interface.
- * @api
- */
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Cap\Brand\Api\Data\BrandInterface;
+
 interface BrandRepositoryInterface
 {
     /**
-     * Save brand.
+     * Save Brand
      *
-     * @param \Cap\Brand\Api\Data\BrandInterface $brand
-     * @return \Cap\Brand\Api\Data\BrandInterface
+     * @param BrandInterface $brand
+     *
+     * @return BrandInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save(Data\BrandInterface $brand);
+    public function save(BrandInterface $brand);
 
     /**
-     * Retrieve brand.
+     * Retrieve Brand
      *
      * @param string $brandId
-     * @return \Cap\Brand\Api\Data\BrandInterface
+     *
+     * @return BrandInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getById($brandId);
+    public function get($brandId);
 
     /**
-     * Retrieve brands matching the specified criteria.
+     * Retrieve Brand matching the specified criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
+     *
      * @return \Cap\Brand\Api\Data\BrandSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getList(SearchCriteriaInterface $searchCriteria);
 
     /**
-     * Delete brand.
+     * Delete Brand
      *
-     * @param \Cap\Brand\Api\Data\BrandInterface $brand
+     * @param BrandInterface $brand
+     *
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete(Data\BrandInterface $brand);
+    public function delete(BrandInterface $brand);
 
     /**
-     * Delete brand by ID.
+     * Delete Brand by ID
      *
      * @param string $brandId
+     *
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException

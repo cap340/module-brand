@@ -1,12 +1,35 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Controller\Adminhtml\Brand;
 
-use Cap\Brand\Controller\Adminhtml\Brand;
-use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Cap\Brand\Model\BrandRepository;
 
-class Delete extends Brand implements HttpPostActionInterface
+class Delete extends Action
 {
+    /**
+     * @var BrandRepository
+     */
+    protected $brandRepository;
+
+    /**
+     * Delete constructor.
+     *
+     * @param Context $context
+     * @param BrandRepository $brandRepository
+     */
+    public function __construct(
+        Context $context,
+        BrandRepository $brandRepository
+    ) {
+        $this->brandRepository = $brandRepository;
+        parent::__construct($context);
+    }
+
     /**
      * Delete action
      *
@@ -20,17 +43,12 @@ class Delete extends Brand implements HttpPostActionInterface
         $id = $this->getRequest()->getParam('brand_id');
         if ($id) {
             try {
-                // init model and delete
-                $model = $this->_objectManager->create(\Cap\Brand\Model\Brand::class);
-                $model->load($id);
-                $model->delete();
-                // display success message
-                $this->messageManager->addSuccessMessage(__('You deleted the brand.'));
+                $this->brandRepository->deleteById($id);
+                $this->messageManager->addSuccessMessage(__('You deleted the Brand.'));
 
                 // go to grid
                 return $resultRedirect->setPath('*/*/');
-            } catch (\Exception $e) {
-                // display error message
+            } catch (NoSuchEntityException | LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
 
                 // go back to edit form
@@ -38,7 +56,7 @@ class Delete extends Brand implements HttpPostActionInterface
             }
         }
         // display error message
-        $this->messageManager->addErrorMessage(__('We can\'t find a brand to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a Brand to delete.'));
 
         // go to grid
         return $resultRedirect->setPath('*/*/');

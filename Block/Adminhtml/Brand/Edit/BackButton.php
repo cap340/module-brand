@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Block\Adminhtml\Brand\Edit;
 

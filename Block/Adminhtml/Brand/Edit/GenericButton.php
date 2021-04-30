@@ -1,13 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Block\Adminhtml\Brand\Edit;
 
-use Cap\Brand\Api\BrandRepositoryInterface;
 use Magento\Backend\Block\Widget\Context;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
-class GenericButton
+abstract class GenericButton
 {
     /**
      * @var Context
@@ -15,38 +13,21 @@ class GenericButton
     protected $context;
 
     /**
-     * @var BrandRepositoryInterface
+     * @param \Magento\Backend\Block\Widget\Context $context
      */
-    protected $brandRepository;
-
-    /**
-     * @param Context $context
-     * @param BrandRepositoryInterface $brandRepository
-     */
-    public function __construct(
-        Context $context,
-        BrandRepositoryInterface $brandRepository
-    ) {
+    public function __construct(Context $context)
+    {
         $this->context = $context;
-        $this->brandRepository = $brandRepository;
     }
 
     /**
-     * Return brand ID
+     * Return model ID
      *
      * @return int|null
      */
-    public function getBrandId()
+    public function getModelId()
     {
-        try {
-            return $this->brandRepository->getById(
-                $this->context->getRequest()->getParam('brand_id')
-            )->getId();
-        } catch (NoSuchEntityException | LocalizedException $e) {
-            $this->context->getLogger()->error($e->getMessage());
-        }
-
-        return null;
+        return $this->context->getRequest()->getParam('brand_id');
     }
 
     /**

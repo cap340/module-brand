@@ -1,6 +1,10 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Cap_Brand::brand" title="Brands" translate="title" module="Cap_Brand" sortOrder="999" parent="Magento_Backend::content_elements" action="cap_brand/brand" resource="Cap_Brand::brand"/>
+        <add id="Cap_Brand::menu" title="Brands" translate="title" module="Cap_Brand" parent="Magento_Backend::content"
+             sortOrder="50" dependsOnModule="Cap_Brand" resource="Cap_Brand::menu"/>
+        <add id="Cap_Brand::list" title="All Brands" translate="title" module="Cap_Brand" parent="Cap_Brand::menu"
+             sortOrder="10" dependsOnModule="Cap_Brand" action="cap_brand/brand" resource="Cap_Brand::list"/>
     </menu>
 </config>

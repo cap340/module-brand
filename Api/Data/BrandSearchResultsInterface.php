@@ -1,25 +1,20 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Api\Data;
 
 use Magento\Framework\Api\SearchResultsInterface;
 
-/**
- * Interface for brand search results.
- * @api
- */
 interface BrandSearchResultsInterface extends SearchResultsInterface
 {
     /**
-     * Get brand list.
-     *
+     * Get Brand list.
      * @return \Cap\Brand\Api\Data\BrandInterface[]
      */
     public function getItems();
 
     /**
-     * Set brand list.
-     *
+     * Set title list.
      * @param \Cap\Brand\Api\Data\BrandInterface[] $items
      * @return $this
      */

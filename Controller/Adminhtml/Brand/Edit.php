@@ -1,14 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Controller\Adminhtml\Brand;
 
-use Cap\Brand\Controller\Adminhtml\Brand;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
+use Cap\Brand\Controller\Adminhtml\Brand as BrandController;
 
-class Edit extends Brand implements HttpGetActionInterface
+class Edit extends BrandController
 {
     /**
      * @var PageFactory
@@ -30,10 +30,9 @@ class Edit extends Brand implements HttpGetActionInterface
     }
 
     /**
-     * Edit Brand
+     * Edit action
      *
      * @return \Magento\Framework\Controller\ResultInterface
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
@@ -44,18 +43,16 @@ class Edit extends Brand implements HttpGetActionInterface
         // 2. Initial checking
         if ($id) {
             $model->load($id);
-            if (! $model->getId()) {
-                $this->messageManager->addErrorMessage(__('This brand no longer exists.'));
+            if (!$model->getId()) {
+                $this->messageManager->addErrorMessage(__('This Brand no longer exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
-
                 return $resultRedirect->setPath('*/*/');
             }
         }
-
         $this->_coreRegistry->register('cap_brand', $model);
 
-        // 5. Build edit form
+        // 3. Build edit form
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $this->initPage($resultPage)->addBreadcrumb(
@@ -63,7 +60,9 @@ class Edit extends Brand implements HttpGetActionInterface
             $id ? __('Edit Brand') : __('New Brand')
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Brands'));
-        $resultPage->getConfig()->getTitle()->prepend($model->getId() ? $model->getTitle() : __('New Brand'));
+        $resultPage->getConfig()->getTitle()->prepend(
+            $model->getId() ? __('Edit %1', $model->getTitle()) : __('New Brand')
+        );
 
         return $resultPage;
     }

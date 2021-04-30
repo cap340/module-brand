@@ -38,8 +38,7 @@ class Category implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-//        $parentCategoryId = $this->helper->getConfigBrandParentCategoryId();
-        $parentCategoryId = 711;
+        $parentCategoryId = $this->helper->getConfigBrandParentCategoryId();
         $categoryObj = $this->categoryRepository->get($parentCategoryId);
         $availableOptions = $categoryObj->getChildrenCategories();
 

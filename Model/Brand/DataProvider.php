@@ -1,17 +1,20 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Model\Brand;
 
-use Cap\Brand\Model\ResourceModel\Brand\CollectionFactory;
 use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use Magento\Framework\Url;
+use Magento\Ui\DataProvider\AbstractDataProvider;
+use Cap\Brand\Model\ResourceModel\Brand\Collection;
+use Cap\Brand\Model\ResourceModel\Brand\CollectionFactory;
 
-class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
+class DataProvider extends AbstractDataProvider
 {
     /**
-     * @var \Cap\Brand\Model\ResourceModel\Brand\Collection
+     * @var
      */
-    protected $collection;
+    protected $loadedData;
 
     /**
      * @var DataPersistorInterface
@@ -19,9 +22,14 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     protected $dataPersistor;
 
     /**
-     * @var array
+     * @var Collection
      */
-    protected $loadedData;
+    protected $collection;
+
+    /**
+     * @var Url
+     */
+    protected $urlBuilder;
 
     /**
      * Constructor
@@ -29,25 +37,26 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param CollectionFactory $brandCollectionFactory
+     * @param CollectionFactory $collectionFactory
      * @param DataPersistorInterface $dataPersistor
+     * @param Url $urlBuilder
      * @param array $meta
      * @param array $data
-     * @param PoolInterface|null $pool
      */
     public function __construct(
         $name,
         $primaryFieldName,
         $requestFieldName,
-        CollectionFactory $brandCollectionFactory,
+        CollectionFactory $collectionFactory,
         DataPersistorInterface $dataPersistor,
+        Url $urlBuilder,
         array $meta = [],
-        array $data = [],
-        PoolInterface $pool = null
+        array $data = []
     ) {
-        $this->collection = $brandCollectionFactory->create();
+        $this->collection = $collectionFactory->create();
         $this->dataPersistor = $dataPersistor;
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
+        $this->urlBuilder = $urlBuilder;
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
@@ -61,16 +70,25 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
-        /** @var \Cap\Brand\Model\Brand $brand */
-        foreach ($items as $brand) {
-            $this->loadedData[$brand->getId()] = $brand->getData();
-        }
+        foreach ($items as $model) {
+            $this->loadedData[$model->getId()] = $model->getData();
 
+            //todo: fix extra add url on save image
+
+//            // Fix Image Uploader in Edit page
+//            if ($model->getSmallImage()) {
+//                $m['small_image'][0]['name'] = $model->getSmallImage();
+//                $m['small_image'][0]['url'] = $this->urlBuilder->getBaseUrl() . $model->getSmallImage();
+//                $fullData = $this->loadedData;
+//                $this->loadedData[$model->getId()] = array_merge($fullData[$model->getId()], $m); //phpcs:ignore
+//            }
+        }
         $data = $this->dataPersistor->get('cap_brand');
+
         if (!empty($data)) {
-            $brand = $this->collection->getNewEmptyItem();
-            $brand->setData($data);
-            $this->loadedData[$brand->getId()] = $brand->getData();
+            $model = $this->collection->getNewEmptyItem();
+            $model->setData($data);
+            $this->loadedData[$model->getId()] = $model->getData();
             $this->dataPersistor->clear('cap_brand');
         }
 

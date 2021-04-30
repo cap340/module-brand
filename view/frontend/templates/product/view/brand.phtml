@@ -1,0 +1,23 @@
+<?php
+/**
+ * @var $block \Magento\Catalog\Block\Product\View
+ * @var $escaper \Magento\Framework\Escaper
+ * @var $viewModel \Cap\Brand\ViewModel\Product\View
+ */
+?>
+<?php
+$viewModel = $block->getViewModel();
+$product = $block->getProduct();
+$brand = $viewModel->getProductBrand($product);
+?>
+<div class="product-brand">
+    <a href="<?= $escaper->escapeUrl($viewModel->getBrandUrl($brand)); ?>" title="<?= $escaper->escapeHtml($brand->getTitle()); ?>">
+        <?php if ($viewModel->canShowBrandImage()): ?>
+            <img src="<?= $escaper->escapeUrl($viewModel->getBrandSmallImageUrl($brand)); ?>"
+                 alt="<?= $escaper->escapeHtml(__('logo %1', $brand->getTitle())); ?>"
+                 width="<?= $escaper->escapeHtmlAttr($viewModel->getBrandSmallImageWidth()); ?>">
+        <?php else: ?>
+            <?= $escaper->escapeHtml($brand->getTitle()); ?>
+        <?php endif; ?>
+    </a>
+</div>

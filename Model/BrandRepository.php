@@ -1,24 +1,26 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Model;
 
-use Cap\Brand\Api\BrandRepositoryInterface;
-use Cap\Brand\Api\Data;
-use Cap\Brand\Model\ResourceModel\Brand as ResourceBrand;
-use Cap\Brand\Model\ResourceModel\Brand\CollectionFactory as BrandCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\EntityManager\HydratorInterface;
+use Cap\Brand\Api\BrandRepositoryInterface;
+use Cap\Brand\Api\Data\BrandInterfaceFactory;
+use Cap\Brand\Api\Data\BrandSearchResultsInterfaceFactory;
+use Cap\Brand\Model\ResourceModel\Brand as ResourceBrand;
+use Cap\Brand\Model\ResourceModel\Brand\CollectionFactory as BrandCollectionFactory;
 
 class BrandRepository implements BrandRepositoryInterface
 {
     /**
-     * @var ResourceBrand
+     * @var BrandInterfaceFactory
      */
-    protected $resource;
+    protected $dataBrandFactory;
 
     /**
      * @var BrandFactory
@@ -26,14 +28,29 @@ class BrandRepository implements BrandRepositoryInterface
     protected $brandFactory;
 
     /**
+     * @var ResourceBrand
+     */
+    protected $resource;
+
+    /**
+     * @var ExtensibleDataObjectConverter
+     */
+    protected $extensibleDataObjectConverter;
+
+    /**
+     * @var BrandSearchResultsInterfaceFactory
+     */
+    protected $searchResultsFactory;
+
+    /**
      * @var BrandCollectionFactory
      */
     protected $brandCollectionFactory;
 
     /**
-     * @var Data\BrandSearchResultsInterfaceFactory
+     * @var StoreManagerInterface
      */
-    protected $searchResultsFactory;
+    private $storeManager;
 
     /**
      * @var DataObjectHelper
@@ -46,14 +63,9 @@ class BrandRepository implements BrandRepositoryInterface
     protected $dataObjectProcessor;
 
     /**
-     * @var \Cap\Brand\Api\Data\BrandInterfaceFactory
+     * @var JoinProcessorInterface
      */
-    protected $dataBrandFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
+    protected $extensionAttributesJoinProcessor;
 
     /**
      * @var CollectionProcessorInterface
@@ -61,35 +73,30 @@ class BrandRepository implements BrandRepositoryInterface
     private $collectionProcessor;
 
     /**
-     * @var HydratorInterface
-     */
-    private $hydrator;
-
-    /**
-     * BrandRepository constructor.
-     *
      * @param ResourceBrand $resource
      * @param BrandFactory $brandFactory
-     * @param Data\BrandInterfaceFactory $dataBrandFactory
+     * @param BrandInterfaceFactory $dataBrandFactory
      * @param BrandCollectionFactory $brandCollectionFactory
-     * @param Data\BrandSearchResultsInterfaceFactory $searchResultsFactory
+     * @param BrandSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
-     * @param CollectionProcessorInterface|null $collectionProcessor
-     * @param HydratorInterface|null $hydrator
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      */
     public function __construct(
         ResourceBrand $resource,
         BrandFactory $brandFactory,
-        \Cap\Brand\Api\Data\BrandInterfaceFactory $dataBrandFactory,
+        BrandInterfaceFactory $dataBrandFactory,
         BrandCollectionFactory $brandCollectionFactory,
-        Data\BrandSearchResultsInterfaceFactory $searchResultsFactory,
+        BrandSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
-        CollectionProcessorInterface $collectionProcessor = null,
-        ?HydratorInterface $hydrator = null
+        CollectionProcessorInterface $collectionProcessor,
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
+        ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
         $this->resource = $resource;
         $this->brandFactory = $brandFactory;
@@ -99,121 +106,108 @@ class BrandRepository implements BrandRepositoryInterface
         $this->dataBrandFactory = $dataBrandFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
-        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
-        $this->hydrator = $hydrator ?? ObjectManager::getInstance()->get(HydratorInterface::class);
+        $this->collectionProcessor = $collectionProcessor;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
     }
 
     /**
-     * Save Brand data
-     *
-     * @param \Cap\Brand\Api\Data\BrandInterface $brand
-     * @return Brand
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * {@inheritdoc}
      */
-    public function save(Data\BrandInterface $brand)
-    {
-        if (empty($brand->getStoreId())) {
-            $brand->setStoreId($this->storeManager->getStore()->getId());
-        }
+    public function save(
+        \Cap\Brand\Api\Data\BrandInterface $brand
+    ) {
+        /* if (empty($brand->getStoreId())) {
+            $storeId = $this->storeManager->getStore()->getId();
+            $brand->setStoreId($storeId);
+        } */
 
-        if ($brand->getId() && $brand instanceof Brand && !$brand->getOrigData()) {
-            $brand = $this->hydrator->hydrate($this->getById($brand->getId()), $this->hydrator->extract($brand));
-        }
+        $brandData = $this->extensibleDataObjectConverter->toNestedArray(
+            $brand,
+            [],
+            \Cap\Brand\Api\Data\BrandInterface::class
+        );
+
+        $brandModel = $this->brandFactory->create()->setData($brandData);
 
         try {
-            $this->resource->save($brand);
+            $this->resource->save($brandModel);
         } catch (\Exception $exception) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__($exception->getMessage()));
+            throw new \Magento\Framework\Exception\CouldNotSaveException(__(
+                'Could not save the brand: %1',
+                $exception->getMessage()
+            ));
         }
-        return $brand;
+        return $brandModel->getDataModel();
     }
 
     /**
-     * Load Brand data by given Brand Identity
-     *
-     * @param string $brandId
-     * @return Brand
-     * @throws \Magento\Framework\Exception\NoSuchEntityException|\Magento\Framework\Exception\LocalizedException
+     * {@inheritdoc}
      */
-    public function getById($brandId)
+    public function get($brandId)
     {
         $brand = $this->brandFactory->create();
         $this->resource->load($brand, $brandId);
         if (!$brand->getId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('The brand with the "%1" ID doesn\'t exist.', $brandId)
+                __('Brand with id "%1" does not exist.', $brandId)
             );
         }
-        return $brand;
+        return $brand->getDataModel();
     }
 
     /**
-     * Load Brand data collection by given search criteria
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return \Cap\Brand\Api\Data\BrandSearchResultsInterface
+     * {@inheritdoc}
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
-    {
-        /** @var \Cap\Brand\Model\ResourceModel\Brand\Collection $collection */
+    public function getList(
+        \Magento\Framework\Api\SearchCriteriaInterface $criteria
+    ) {
         $collection = $this->brandCollectionFactory->create();
+
+        $this->extensionAttributesJoinProcessor->process(
+            $collection,
+            \Cap\Brand\Api\Data\BrandInterface::class
+        );
 
         $this->collectionProcessor->process($criteria, $collection);
 
-        /** @var Data\BrandSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
-        $searchResults->setItems($collection->getItems());
+
+        $items = [];
+        foreach ($collection as $model) {
+            $items[] = $model->getDataModel();
+        }
+
+        $searchResults->setItems($items);
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
     }
 
     /**
-     * Delete Brand
-     *
-     * @param \Cap\Brand\Api\Data\BrandInterface $brand
-     * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * {@inheritdoc}
      */
-    public function delete(Data\BrandInterface $brand)
-    {
+    public function delete(
+        \Cap\Brand\Api\Data\BrandInterface $brand
+    ) {
         try {
-            $this->resource->delete($brand);
+            $brandModel = $this->brandFactory->create();
+            $this->resource->load($brandModel, $brand->getBrandId());
+            $this->resource->delete($brandModel);
         } catch (\Exception $exception) {
-            throw new \Magento\Framework\Exception\CouldNotDeleteException(__($exception->getMessage()));
+            throw new \Magento\Framework\Exception\CouldNotDeleteException(__(
+                'Could not delete the Brand: %1',
+                $exception->getMessage()
+            ));
         }
         return true;
     }
 
     /**
-     * Delete Brand by given Brand Identity
-     *
-     * @param string $brandId
-     * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException|\Magento\Framework\Exception\LocalizedException
+     * {@inheritdoc}
      */
     public function deleteById($brandId)
     {
-        return $this->delete($this->getById($brandId));
-    }
-
-    /**
-     * Retrieve collection processor
-     *
-     * @deprecated 102.0.0
-     * @return CollectionProcessorInterface
-     */
-    private function getCollectionProcessor()
-    {
-        //phpcs:disable Magento2.PHP.LiteralNamespaces
-        if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Cap\Brand\Model\Api\SearchCriteria\BrandCollectionProcessor'
-            );
-        }
-        return $this->collectionProcessor;
+        return $this->delete($this->get($brandId));
     }
 }

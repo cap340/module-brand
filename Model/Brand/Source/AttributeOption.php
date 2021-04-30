@@ -37,8 +37,7 @@ class AttributeOption implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-//        $attributeCode = $this->helper->getConfigBrandAttributeCode();
-        $attributeCode = 375;
+        $attributeCode = $this->helper->getConfigBrandAttributeCode();
         try {
             $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeCode);
 

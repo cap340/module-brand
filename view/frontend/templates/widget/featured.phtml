@@ -1,0 +1,21 @@
+<?php
+/**
+ * Featured Brand Widget template file.
+ *
+ * @var \Cap\Brand\Block\Widget\Featured $block
+ * @var $escaper \Magento\Framework\Escaper
+ */
+
+$collection = $block->getFeaturedBrands();
+?>
+
+<?php foreach ($collection as $brand): ?>
+    <?php if ($block->getData('show_brand_name')): ?>
+        <?= $escaper->escapeHtml($brand->getTitle()) ?>
+    <?php endif; ?>
+    <a class="brand" title="<?= $escaper->escapeHtml($brand->getTitle()) ?>"
+       href="<?= $escaper->escapeUrl($block->getBrandUrl($brand)) ?>">
+        <img src="<?= $escaper->escapeUrl($block->getBrandSmallImageUrl($brand)) ?>"
+             alt="<?= $escaper->escapeHtml($brand->getTitle()) . ' ' . __('logo') ?>""/>
+    </a>
+<?php endforeach; ?>

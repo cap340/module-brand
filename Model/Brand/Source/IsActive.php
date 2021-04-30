@@ -36,6 +36,7 @@ class IsActive implements OptionSourceInterface
                 'value' => $key,
             ];
         }
+
         return $options;
     }
 }

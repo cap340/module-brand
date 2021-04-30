@@ -1,0 +1,20 @@
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget class="Cap\Brand\Block\Widget\Featured" id="cap_brand_widget_featured">
+        <label>Brand Featured</label>
+        <description>List of Featured Brand</description>
+        <parameters>
+            <parameter name="title" xsi:type="text" visible="true" sort_order="10">
+                <label>Label</label>
+            </parameter>
+            <parameter name="show_brand_name" xsi:type="select" visible="true" sort_order="30" source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Show Brand Name</label>
+            </parameter>
+            <parameter name="items" xsi:type="text" visible="true" sort_order="60">
+                <label translate="true">Items</label>
+                <description translate="true">This variable allows you to set the maximum amount of items displayed at a time with the widest browser width.</description>
+                <value>5</value>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

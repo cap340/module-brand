@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Cap\Brand\Block\Adminhtml\Brand\Edit;
 
@@ -7,18 +8,18 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 class DeleteButton extends GenericButton implements ButtonProviderInterface
 {
     /**
-     * @inheritDoc
+     * @return array
      */
     public function getButtonData()
     {
         $data = [];
-        if ($this->getBrandId()) {
+        if ($this->getModelId()) {
             $data = [
                 'label' => __('Delete Brand'),
                 'class' => 'delete',
                 'on_click' => 'deleteConfirm(\'' . __(
                     'Are you sure you want to do this?'
-                ) . '\', \'' . $this->getDeleteUrl() . '\', {"data": {}})',
+                ) . '\', \'' . $this->getDeleteUrl() . '\')',
                 'sort_order' => 20,
             ];
         }
@@ -26,12 +27,12 @@ class DeleteButton extends GenericButton implements ButtonProviderInterface
     }
 
     /**
-     * URL to send delete requests to.
+     * Get URL for delete button
      *
      * @return string
      */
     public function getDeleteUrl()
     {
-        return $this->getUrl('*/*/delete', ['brand_id' => $this->getBrandId()]);
+        return $this->getUrl('*/*/delete', ['brand_id' => $this->getModelId()]);
     }
 }

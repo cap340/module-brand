@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <cap_brand>
+            <product_page_settings>
+                <show_brand>1</show_brand>
+                <show_brand_img>1</show_brand_img>
+            </product_page_settings>
+            <list_page_settings>
+                <show_brand>1</show_brand>
+            </list_page_settings>
+        </cap_brand>
+    </default>
+</config>

@@ -5,7 +5,7 @@ namespace Cap\Brand\Block\Adminhtml\Brand\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
-class SaveButton extends GenericButton implements ButtonProviderInterface
+class SaveAndContinueButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @return array
@@ -13,13 +13,14 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
     public function getButtonData()
     {
         return [
-            'label' => __('Save Brand'),
-            'class' => 'save primary',
+            'label' => __('Save and Continue Edit'),
+            'class' => 'save',
             'data_attribute' => [
-                'mage-init' => ['button' => ['event' => 'save']],
-                'form-role' => 'save',
+                'mage-init' => [
+                    'button' => ['event' => 'saveAndContinueEdit'],
+                ],
             ],
-            'sort_order' => 90,
+            'sort_order' => 80,
         ];
     }
 }
