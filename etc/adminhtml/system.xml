@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="cap_brand" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <class>separator-top</class>
+            <label>Brand</label>
+            <tab>cap</tab>
+            <resource>Cap_Brand::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>General</label>
+                <field id="parent_category_id" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10"
+                       translate="label" type="select">
+                    <label>Parent Category</label>
+                    <source_model>Cap\Brand\Model\Config\Source\Categories</source_model>
+                </field>
+                <field id="attribute_id" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20"
+                       translate="label" type="select">
+                    <label>Brand Attribute</label>
+                    <source_model>Cap\Brand\Model\Config\Source\Attributes</source_model>
+                </field>
+            </group>
+            <group id="product_page_settings" translate="label" type="text" sortOrder="20" showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <label>Product Page Settings</label>
+                <field id="show_brand" translate="label comment" type="select" showInDefault="1" showInWebsite="1"
+                       showInStore="1" sortOrder="10">
+                    <label>Show Brand</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="show_brand_img" translate="label comment" type="select" showInDefault="1" showInWebsite="1"
+                       showInStore="1" sortOrder="20">
+                    <label>Show Brand Image</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="show_brand">1</field>
+                    </depends>
+                </field>
+                <field id="img_width" translate="label comment" type="text" showInDefault="1" showInWebsite="1"
+                       showInStore="1" sortOrder="30">
+                    <label>Image Width</label>
+                    <depends>
+                        <field id="show_brand_img">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="list_page_settings" translate="label" type="text" sortOrder="30" showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <label>List Page Settings</label>
+                <field id="show_brand" translate="label comment" type="select" showInDefault="1" showInWebsite="1"
+                       showInStore="1" sortOrder="10">
+                    <label>Show Brand</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

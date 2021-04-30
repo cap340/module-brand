@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="cap_brand" resource="default" engine="innodb" comment="Cap Brand Table">
+        <column xsi:type="smallint" name="brand_id" unsigned="false" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="title" nullable="false" length="255" comment="Brand Title"/>
+        <column xsi:type="varchar" name="identifier" nullable="false" length="255" comment="Brand String Identifier"/>
+        <column xsi:type="smallint" name="category_id" nullable="false" comment="Brand Category ID"/>
+        <column xsi:type="smallint" name="attribute_option" nullable="false" comment="Brand Attribute Option ID"/>
+        <column xsi:type="smallint" name="is_active" unsigned="false" nullable="false" identity="false"
+                default="1" comment="Is Brand Active"/>
+        <column xsi:type="smallint" name="is_featured" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Is Brand Featured"/>
+        <column xsi:type="text" name="small_image" nullable="true" comment="Brand Small Image"/>
+        <column xsi:type="timestamp" name="creation_time" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Brand Creation Time"/>
+        <column xsi:type="timestamp" name="update_time" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Brand Modification Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="brand_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="CAP_BRAND_CATEGORY_ID">
+            <column name="category_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="CAP_BRAND_ATTRIBUTE_OPTION">
+            <column name="attribute_option"/>
+        </constraint>
+        <index referenceId="CAP_BRAND_TITLE_IDENTIFIER_CONTENT" indexType="fulltext">
+            <column name="title"/>
+            <column name="identifier"/>
+            <column name="content"/>
+        </index>
+    </table>
+    <table name="cap_brand_store" resource="default" engine="innodb" comment="Cap Brand To Store Linkage Table">
+        <column xsi:type="smallint" name="brand_id" unsigned="false" nullable="false" identity="false"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
+                comment="Store ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="brand_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CAP_BRAND_STORE_BRAND_ID_CAP_BRAND_BRAND_ID" table="cap_brand_store"
+                    column="brand_id" referenceTable="cap_brand" referenceColumn="brand_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CAP_BRAND_STORE_STORE_ID_STORE_STORE_ID" table="cap_brand_store"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="CAP_BRAND_STORE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+</schema>
