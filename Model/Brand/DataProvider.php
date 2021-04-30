@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Cap\Brand\Model\Brand;
 
-use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Framework\Url;
-use Magento\Ui\DataProvider\AbstractDataProvider;
 use Cap\Brand\Model\ResourceModel\Brand\Collection;
 use Cap\Brand\Model\ResourceModel\Brand\CollectionFactory;
+use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 class DataProvider extends AbstractDataProvider
 {
@@ -27,9 +27,9 @@ class DataProvider extends AbstractDataProvider
     protected $collection;
 
     /**
-     * @var Url
+     * @var StoreManagerInterface
      */
-    protected $urlBuilder;
+    protected $storeManager;
 
     /**
      * Constructor
@@ -39,7 +39,7 @@ class DataProvider extends AbstractDataProvider
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param DataPersistorInterface $dataPersistor
-     * @param Url $urlBuilder
+     * @param StoreManagerInterface $storeManager
      * @param array $meta
      * @param array $data
      */
@@ -49,13 +49,13 @@ class DataProvider extends AbstractDataProvider
         $requestFieldName,
         CollectionFactory $collectionFactory,
         DataPersistorInterface $dataPersistor,
-        Url $urlBuilder,
+        StoreManagerInterface $storeManager,
         array $meta = [],
         array $data = []
     ) {
         $this->collection = $collectionFactory->create();
         $this->dataPersistor = $dataPersistor;
-        $this->urlBuilder = $urlBuilder;
+        $this->storeManager = $storeManager;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
@@ -63,22 +63,22 @@ class DataProvider extends AbstractDataProvider
      * Get data
      *
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getData()
     {
+        $baseurl =  $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
         foreach ($items as $model) {
             $this->loadedData[$model->getId()] = $model->getData();
-
-            //todo: fix extra add url on save image
-
-//            // Fix Image Uploader in Edit page
-//            if ($model->getSmallImage()) {
-//                $m['small_image'][0]['name'] = $model->getSmallImage();
-//                $m['small_image'][0]['url'] = $this->urlBuilder->getBaseUrl() . $model->getSmallImage();
+//            //todo: fix extra add url on save image
+//            if ($model->getData('small_image')) {
+//                $m['small_image'][0]['name'] = $model->getData('small_image');
+//                $m['small_image'][0]['url'] = $baseurl . $model->getData('small_image');
 //                $fullData = $this->loadedData;
 //                $this->loadedData[$model->getId()] = array_merge($fullData[$model->getId()], $m); //phpcs:ignore
 //            }

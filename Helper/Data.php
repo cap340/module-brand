@@ -219,6 +219,9 @@ class Data extends AbstractHelper
         }
     }
 
+    /**
+     * @return bool
+     */
     public function canShowBrandImage()
     {
         $showBrand = $this->scopeConfig->getValue(
