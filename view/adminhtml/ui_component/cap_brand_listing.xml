@@ -12,6 +12,10 @@
             <dep>cap_brand_listing.cap_brand_listing_data_source</dep>
         </deps>
         <buttons>
+            <button name="assign_products">
+                <url path="cap_brand/category/assignProducts"/>
+                <label translate="true">Assign Products To Categories</label>
+            </button>
             <button name="add">
                 <url path="*/*/new"/>
                 <class>primary</class>

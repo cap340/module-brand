@@ -6,6 +6,8 @@
 $collection = $block->getProductCollection();
 $attributeCode = $block->getConfigBrandAttributeCode();
 
+//todo: remove after test complete
+
 ?>
 <table class="data-grid data-grid-draggable">
     <thead>
@@ -13,7 +15,7 @@ $attributeCode = $block->getConfigBrandAttributeCode();
         <th scope="col">Name</th>
         <th scope="col">Attribute Code</th>
         <th scope="col">Matching Brand Id</th>
-        <th scope="col">Visibility</th>
+        <th scope="col">Brand Name</th>
         <th scope="col">Current Categories Id</th>
         <th scope="col">Brand Category Id to merge</th>
         <th scope="col">Final Categories</th>
@@ -25,14 +27,18 @@ $attributeCode = $block->getConfigBrandAttributeCode();
         <?php $brand = $block->getProductBrand($product); ?>
         <?php $productCategories = $product->getCategoryIds(); ?>
         <tr>
-            <td><?= $product->getName() ?></td>
+            <td><?= $product->getSku() ?></td>
             <td><?= $product->getData($attributeCode) ?></td>
             <td>
                 <?php if ($brand): ?>
                     <?= $brand->getBrandId() ?>
                 <?php endif; ?>
             </td>
-            <td><?= $product->getAttributeText('visibility'); ?></td>
+            <td>
+                <?php if ($brand): ?>
+                    <?= $brand->getTitle(); ?>
+                <?php endif; ?>
+            </td>
             <td><?php print_r($productCategories) ?></td>
             <td>
                 <?php if ($brand): ?>

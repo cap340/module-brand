@@ -3,11 +3,16 @@
 namespace Cap\Brand\Block\Adminhtml\Category;
 
 use Cap\Brand\Helper\Data;
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
+use Magento\Catalog\Model\CategoryLinkRepository;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\View\Element\Template;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Template;
+
+//todo: remove after test complete
 
 class LinkProducts extends Template
 {
@@ -37,6 +42,11 @@ class LinkProducts extends Template
     protected $productVisibility;
 
     /**
+     * @var CategoryLinkRepository
+     */
+    protected $categoryLinkRepository;
+
+    /**
      * LinkProducts constructor.
      *
      * @param Template\Context $context
@@ -44,6 +54,7 @@ class LinkProducts extends Template
      * @param Data $helper
      * @param Status $productStatus
      * @param Visibility $productVisibility
+     * @param CategoryLinkRepository $categoryLinkRepository
      * @param array $data
      */
     public function __construct(
@@ -52,12 +63,14 @@ class LinkProducts extends Template
         Data $helper,
         Status $productStatus,
         Visibility $productVisibility,
+        CategoryLinkRepository $categoryLinkRepository,
         array $data = []
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->helper = $helper;
         $this->productStatus = $productStatus;
         $this->productVisibility = $productVisibility;
+        $this->categoryLinkRepository = $categoryLinkRepository;
         parent::__construct($context, $data);
     }
 
@@ -73,7 +86,7 @@ class LinkProducts extends Template
         $collection->setVisibility($this->productVisibility->getVisibleInSiteIds());
         // Filter product with brand attribute
         $collection->addAttributeToFilter($this->getConfigBrandAttributeCode(), ['neq' => '']);
-        $collection->setPageSize(30);
+        $collection->setPageSize(100);
 
         return $collection;
     }
@@ -96,5 +109,31 @@ class LinkProducts extends Template
     public function getProductBrand(Product $product)
     {
         return $this->helper->getProductBrand($product);
+    }
+
+    /**
+     * @param Product $product
+     * @param $categoryIds
+     */
+    public function assignProductsToCategory(Product $product, $categoryIds)
+    {
+        $this->getCategoryLinkManagement()
+             ->assignProductToCategories(
+                 $product->getSku(),
+                 $categoryIds
+             );
+    }
+
+    /**
+     * @return CategoryLinkManagementInterface|CategoryLinkRepository|mixed
+     */
+    private function getCategoryLinkManagement()
+    {
+        if (null === $this->categoryLinkRepository) {
+            $this->categoryLinkRepository = ObjectManager::getInstance()
+                                                         ->get(CategoryLinkManagementInterface::class);
+        }
+
+        return $this->categoryLinkRepository;
     }
 }
