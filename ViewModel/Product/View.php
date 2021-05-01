@@ -134,4 +134,19 @@ class View implements ArgumentInterface
 
         return $collection;
     }
+
+    /**
+     * Find out if some products can be easy added to cart
+     *
+     * @return bool
+     */
+    public function canItemsAddToCart(Product $product)
+    {
+        foreach ($this->getProductRelatedBrandCollection($product) as $item) {
+            if (!$item->isComposite() && $item->isSaleable() && !$item->getRequiredOptions()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
