@@ -23,8 +23,7 @@
                 </field>
             </group>
             <group id="product_page_settings" translate="label" type="text" sortOrder="20" showInDefault="1"
-                   showInWebsite="1"
-                   showInStore="1">
+                   showInWebsite="1" showInStore="1">
                 <label>Product Page Settings</label>
                 <field id="show_brand" translate="label comment" type="select" showInDefault="1" showInWebsite="1"
                        showInStore="1" sortOrder="10">
@@ -46,10 +45,14 @@
                         <field id="show_brand_img">1</field>
                     </depends>
                 </field>
+                <field id="show_related" translate="label comment" type="select" showInDefault="1" showInWebsite="1"
+                       showInStore="1" sortOrder="40">
+                    <label>Show Brand Related Products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="list_page_settings" translate="label" type="text" sortOrder="30" showInDefault="1"
-                   showInWebsite="1"
-                   showInStore="1">
+                   showInWebsite="1" showInStore="1">
                 <label>List Page Settings</label>
                 <field id="show_brand" translate="label comment" type="select" showInDefault="1" showInWebsite="1"
                        showInStore="1" sortOrder="10">

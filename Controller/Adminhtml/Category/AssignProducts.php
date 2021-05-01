@@ -145,8 +145,6 @@ class AssignProducts extends Action
             $this->helper->getConfigBrandAttributeCode(),
             ['neq' => '']
         );
-        //todo: remove after test
-        $collection->setPageSize(100);
 
         return $collection;
     }

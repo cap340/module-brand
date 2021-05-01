@@ -228,7 +228,6 @@ class Data extends AbstractHelper
             'cap_brand/product_page_settings/show_brand_img',
             ScopeInterface::SCOPE_STORE
         );
-
         if ($showBrand) {
             return true;
         }

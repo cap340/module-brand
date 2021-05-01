@@ -1,1 +1,20 @@
-<h1>RELATED PRODUCTS BRAND</h1>
+<?php
+/**
+ * @var $block \Magento\Catalog\Block\Product\View
+ * @var $escaper \Magento\Framework\Escaper
+ * @var $viewModel \Cap\Brand\ViewModel\Product\View
+ */
+
+$viewModel = $block->getViewModel();
+$product = $block->getProduct();
+$collection = $viewModel->getProductRelatedBrandCollection($product);
+
+echo 'size';
+echo $collection->getSize();
+echo 'count';
+echo $collection->count();
+echo '<br>';
+
+foreach ($collection as $item) {
+    echo $item->getName() . '<br>';
+}
