@@ -130,8 +130,17 @@ class View implements ArgumentInterface
         );
         // for random collection
         $collection->getSelect()->orderRand();
-        $collection->setPageSize(5);
+        // filter collection with config per row for performance issue
+        $collection->setPageSize($this->getConfigRelatedProductPerRow());
 
         return $collection;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConfigRelatedProductPerRow()
+    {
+        return $this->helper->getConfigRelatedProductPerRow();
     }
 }

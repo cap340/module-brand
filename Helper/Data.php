@@ -123,6 +123,17 @@ class Data extends AbstractHelper
         );
     }
 
+    /**
+     * @return mixed
+     */
+    public function getConfigRelatedProductPerRow()
+    {
+        return $this->scopeConfig->getValue(
+            'cap_brand/product_page_settings/product_per_row',
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
     /** BRAND HELPERS */
 
     /**

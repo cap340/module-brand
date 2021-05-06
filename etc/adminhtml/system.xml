@@ -50,6 +50,11 @@
                     <label>Show Brand Related Products</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="product_per_row" translate="label comment" type="select" showInDefault="1" showInWebsite="1"
+                       showInStore="1" sortOrder="50">
+                    <label>Number Of Product Per Row</label>
+                    <source_model>Cap\Brand\Model\Config\Source\Perrow</source_model>
+                </field>
             </group>
             <group id="list_page_settings" translate="label" type="text" sortOrder="30" showInDefault="1"
                    showInWebsite="1" showInStore="1">

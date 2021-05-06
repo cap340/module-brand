@@ -6,6 +6,8 @@
             <product_page_settings>
                 <show_brand>1</show_brand>
                 <show_brand_img>1</show_brand_img>
+                <show_related>1</show_related>
+                <product_per_row>6</product_per_row>
             </product_page_settings>
             <list_page_settings>
                 <show_brand>1</show_brand>
