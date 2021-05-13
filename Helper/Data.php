@@ -11,6 +11,7 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -154,7 +155,7 @@ class Data extends AbstractHelper
             $brandList = $this->brandRepository->getList($searchCriteria);
 
             return current($brandList->getItems());
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->_logger->error($e->getMessage());
 
             return false;
@@ -180,7 +181,7 @@ class Data extends AbstractHelper
 
             // Only return first item as category_id is unique in db
             return current($brandList->getItems());
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->_logger->error($e->getMessage());
 
             return false;
@@ -244,6 +245,27 @@ class Data extends AbstractHelper
         }
 
         return false;
+    }
+
+    /**
+     * @return BrandInterface[]|false
+     */
+    public function getFeaturedBrands()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('is_active', 1)
+            ->addFilter('is_featured', 1)
+            ->create();
+
+        try {
+            $brandList = $this->brandRepository->getList($searchCriteria);
+
+            return $brandList->getItems();
+        } catch (LocalizedException $e) {
+            $this->_logger->error($e->getMessage());
+
+            return false;
+        }
     }
 
     /** PRODUCT HELPERS */

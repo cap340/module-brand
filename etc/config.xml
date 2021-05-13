@@ -12,6 +12,9 @@
             <list_page_settings>
                 <show_brand>1</show_brand>
             </list_page_settings>
+            <footer_settings>
+                <show_brand>1</show_brand>
+            </footer_settings>
         </cap_brand>
     </default>
 </config>
