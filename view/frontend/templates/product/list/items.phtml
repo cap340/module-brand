@@ -19,7 +19,7 @@ $items = $viewModel->getProductRelatedBrandCollection($block->getProduct());
 $limit = $viewModel->getConfigRelatedProductPerRow();
 $shuffle = 0;
 $isWeightedRandom = 0;
-$showAddTo = true;
+$showAddTo = false;
 ?>
 <div class="block <?= $escaper->escapeHtmlAttr($class) ?>"
      data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}'
