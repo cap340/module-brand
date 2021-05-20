@@ -12,7 +12,7 @@ $brand = $viewModel->getProductBrand($product);
 ?>
 <div class="product-brand">
     <a href="<?= $escaper->escapeUrl($viewModel->getBrandUrl($brand)); ?>" title="<?= $escaper->escapeHtml($brand->getTitle()); ?>">
-        <?php if ($viewModel->canShowBrandImage()): ?>
+        <?php if ($viewModel->canShowBrandImage() && $viewModel->getBrandSmallImageUrl($brand)): ?>
             <img src="<?= $escaper->escapeUrl($viewModel->getBrandSmallImageUrl($brand)); ?>"
                  alt="<?= $escaper->escapeHtml(__('logo %1', $brand->getTitle())); ?>"
                  width="<?= $escaper->escapeHtmlAttr($viewModel->getBrandSmallImageWidth()); ?>">

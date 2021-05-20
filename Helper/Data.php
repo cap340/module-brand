@@ -199,12 +199,15 @@ class Data extends AbstractHelper
             $mediaUrl = $this->storeManager->getStore()
                                            ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
 
-            return $mediaUrl . $brand->getSmallImage();
+            // check if small_image is set
+            if ($brand->getSmallImage()) {
+                return $mediaUrl . $brand->getSmallImage();
+            }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             $this->_logger->error($e->getMessage());
-
-            return false;
         }
+
+        return false;
     }
 
     /**
