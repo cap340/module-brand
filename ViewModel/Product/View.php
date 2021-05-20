@@ -117,6 +117,7 @@ class View implements ArgumentInterface
         $brand = $this->helper->getProductBrand($product);
         $categoryId = $brand->getCategoryId();
         $category = $this->categoryFactory->create()->load($categoryId);
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->productCollectionFactory->create();
         $collection->addAttributeToSelect('*');
         $collection->addCategoryFilter($category);
@@ -128,6 +129,15 @@ class View implements ArgumentInterface
             'status',
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         );
+        // remove same product & related
+        $removeProducts = [];
+        if ($product->getRelatedProductIds()) {
+            foreach ($product->getRelatedProductIds() as $relatedProductId) {
+                $removeProducts[] = $relatedProductId;
+            }
+        }
+        array_push($removeProducts, $product->getId());
+        $collection->addFieldToFilter('entity_id', ['nin' => $removeProducts]);
         // for random collection
         $collection->getSelect()->orderRand();
         // filter collection with config per row for performance issue
