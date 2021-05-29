@@ -11,6 +11,8 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 
+//todo: add loader & warning could be long to execute
+
 class AssignProducts extends Action
 {
     /**

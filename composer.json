@@ -1,14 +1,10 @@
 {
     "name": "cap/module-brand",
-    "description": "N/A",
+    "description": "Magento 2 Brand Management Module",
     "type": "magento2-module",
     "license": [
-        "OSL-3.0",
-        "AFL-3.0"
+        "OSL-3.0"
     ],
-    "config": {
-        "sort-packages": true
-    },
     "version": "104.0.2",
     "require": {
         "php": "~7.3.0||~7.4.0",

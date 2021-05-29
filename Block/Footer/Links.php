@@ -31,7 +31,7 @@ class Links extends \Magento\Framework\View\Element\Html\Link\Current
         parent::__construct($context, $defaultPath, $data);
     }
 
-    //todo: if current
+    //todo: if current link
     protected function _toHtml()
     {
         if (false != $this->getTemplate()) {

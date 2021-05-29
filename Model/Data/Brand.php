@@ -6,6 +6,7 @@ namespace Cap\Brand\Model\Data;
 use Cap\Brand\Api\Data\BrandInterface;
 
 //todo: Fix deprecated
+
 class Brand extends \Magento\Framework\Api\AbstractExtensibleObject implements BrandInterface
 {
     /**

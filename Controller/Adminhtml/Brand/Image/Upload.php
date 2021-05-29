@@ -7,6 +7,8 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\Controller\ResultFactory;
 
+//todo: fixes image upload and DataProvider appending path to each record.
+
 class Upload extends Action
 {
     /**

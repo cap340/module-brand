@@ -9,9 +9,6 @@
                 <show_related>1</show_related>
                 <product_per_row>6</product_per_row>
             </product_page_settings>
-            <list_page_settings>
-                <show_brand>1</show_brand>
-            </list_page_settings>
             <footer_settings>
                 <show_brand>1</show_brand>
             </footer_settings>

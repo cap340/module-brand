@@ -5,6 +5,10 @@ namespace Cap\Brand\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * Interface BrandInterface
+ * @api
+ */
 interface BrandInterface extends ExtensibleDataInterface
 {
     const BRAND_ID = 'brand_id';

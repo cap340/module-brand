@@ -8,6 +8,7 @@ use Magento\Catalog\Model\Product\Visibility;
 
 // todo: get attribute code instead of id in grid
 // todo: use select form to filter
+// todo: remove deprecated
 
 class Product extends \Magento\Catalog\Block\Adminhtml\Category\Tab\Product
 {

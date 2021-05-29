@@ -6,6 +6,10 @@ namespace Cap\Brand\Api;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Cap\Brand\Api\Data\BrandInterface;
 
+/**
+ * Interface BrandRepositoryInterface
+ * @api
+ */
 interface BrandRepositoryInterface
 {
     /**
