@@ -7,8 +7,8 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Cap\Brand\Api\Data\BrandInterface;
 
 /**
- * Interface BrandRepositoryInterface
  * @api
+ * @since 104.0.2
  */
 interface BrandRepositoryInterface
 {

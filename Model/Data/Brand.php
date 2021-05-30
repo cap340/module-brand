@@ -52,8 +52,7 @@ class Brand extends \Magento\Framework\Api\AbstractExtensibleObject implements B
     }
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
-     * @return \Cap\Brand\Api\Data\BrandExtensionInterface|null
+     * @inheritDoc
      */
     public function getExtensionAttributes()
     {
@@ -61,9 +60,7 @@ class Brand extends \Magento\Framework\Api\AbstractExtensibleObject implements B
     }
 
     /**
-     * Set an extension attributes object.
-     * @param \Cap\Brand\Api\Data\BrandExtensionInterface $extensionAttributes
-     * @return $this
+     * @inheritDoc
      */
     public function setExtensionAttributes(
         \Cap\Brand\Api\Data\BrandExtensionInterface $extensionAttributes

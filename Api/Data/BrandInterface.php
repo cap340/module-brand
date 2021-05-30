@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Cap\Brand\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
- * Interface BrandInterface
  * @api
+ * @since 104.0.2
  */
-interface BrandInterface extends ExtensibleDataInterface
+interface BrandInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     const BRAND_ID = 'brand_id';
     const TITLE = 'title';
@@ -53,18 +51,18 @@ interface BrandInterface extends ExtensibleDataInterface
 
     /**
      * Retrieve existing extension attributes object or create a new one.
-     * @return BrandExtensionInterface|null
+     *
+     * @return \Cap\Brand\Api\Data\BrandExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param BrandExtensionInterface $extensionAttributes
-     *
+     * @param \Cap\Brand\Api\Data\BrandExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(BrandExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(\Cap\Brand\Api\Data\BrandExtensionInterface $extensionAttributes);
 
     /**
      * Get category_id

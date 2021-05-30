@@ -6,8 +6,8 @@ namespace Cap\Brand\Api\Data;
 use Magento\Framework\Api\SearchResultsInterface;
 
 /**
- * Interface BrandSearchResultsInterface
  * @api
+ * @since 104.0.2
  */
 interface BrandSearchResultsInterface extends SearchResultsInterface
 {
