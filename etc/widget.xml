@@ -21,11 +21,14 @@
         <label>Brands List</label>
         <description>List of Brands</description>
         <parameters>
-            <parameter name="title" xsi:type="text" visible="true" sort_order="20">
+            <parameter name="title" xsi:type="text" visible="true" sort_order="10">
                 <label>Label</label>
             </parameter>
-            <parameter name="show_brand_name" xsi:type="select" visible="true" sort_order="30" source_model="Magento\Config\Model\Config\Source\Yesno">
+            <parameter name="show_brand_name" xsi:type="select" visible="true" sort_order="20" source_model="Magento\Config\Model\Config\Source\Yesno">
                 <label translate="true">Show Brand Name</label>
+            </parameter>
+            <parameter name="show_brand_small_image" xsi:type="select" visible="true" sort_order="30" source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Show Brand Small Image</label>
             </parameter>
         </parameters>
     </widget>

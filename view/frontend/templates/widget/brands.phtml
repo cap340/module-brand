@@ -7,15 +7,28 @@
  */
 
 $collection = $block->getBrands();
-?>
+$array = $block->getBrandsGroupedByCharacter();
 
-<?php foreach ($collection as $brand): ?>
-    <?php if ($block->getData('show_brand_name')): ?>
-        <?= $escaper->escapeHtml($brand->getTitle()) ?>
-    <?php endif; ?>
-    <a class="brand" title="<?= $escaper->escapeHtml($brand->getTitle()) ?>"
-       href="<?= $escaper->escapeUrl($block->getBrandUrl($brand)) ?>">
-        <img src="<?= $escaper->escapeUrl($block->getBrandSmallImageUrl($brand)) ?>"
-             alt="<?= $escaper->escapeHtml($brand->getTitle()) . ' ' . __('logo') ?>""/>
-    </a>
-<?php endforeach; ?>
+//todo: template
+?>
+<?php if ($collection->count()): ?>
+    <div class="widget-brands-list">
+        <?php foreach ($array as $key => $letter): ?>
+            <h3><?= $escaper->escapeHtml($key); ?></h3>
+            <ul>
+                <?php foreach ($letter as $item): ?>
+                    <li>
+                        <?php if ($block->getData('show_brand_small_image')): ?>
+                            <a href="<?= $escaper->escapeUrl($item['url']); ?>" title="<?= $escaper->escapeHtml($item['title']); ?>">
+                                <img src="<?= $escaper->escapeUrl($item['small_image']); ?>" alt="<?= $escaper->escapeHtml($item['title']); ?>">
+                            </a>
+                        <?php endif; ?>
+                        <?php if ($block->getData('show_brand_name')): ?>
+                            <a href="<?= $escaper->escapeUrl($item['url']); ?>" title="<?= $escaper->escapeHtml($item['title']); ?>"><?= $escaper->escapeHtml($item['title']); ?></a>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

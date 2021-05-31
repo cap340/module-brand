@@ -116,4 +116,28 @@ class Brands extends Template implements BlockInterface
             return false;
         }
     }
+
+    /**
+     * Returns multidimensional array with brands grouped by character as key.
+     *
+     * @return array
+     */
+    public function getBrandsGroupedByCharacter()
+    {
+        $array = [];
+        foreach (range('A', 'Z') as $key => $char) {
+            foreach ($this->getBrands() as $brand) {
+                if (strtoupper(substr($brand->getData('title'), 0, 1)) == $char) {
+                    $key = $char;
+                    $array[$key][] = [
+                        'title' => $brand->getData('title'),
+                        'url' => $this->getBrandUrl($brand),
+                        'small_image' => $this->getBrandSmallImageUrl($brand)
+                    ];
+                }
+            }
+        }
+
+        return $array;
+    }
 }
