@@ -4,8 +4,7 @@
     <preference for="Cap\Brand\Api\BrandRepositoryInterface" type="Cap\Brand\Model\BrandRepository"/>
     <preference for="Cap\Brand\Api\Data\BrandInterface" type="Cap\Brand\Model\Data\Brand"/>
     <preference for="Cap\Brand\Api\Data\BrandSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
-    <virtualType name="Cap\Brand\Model\ResourceModel\Brand\Grid\Collection"
-                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <virtualType name="Cap\Brand\Model\ResourceModel\Brand\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">cap_brand</argument>
             <argument name="resourceModel" xsi:type="string">Cap\Brand\Model\ResourceModel\Brand\Collection</argument>
@@ -14,9 +13,7 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="cap_brand_listing_data_source" xsi:type="string">
-                    Cap\Brand\Model\ResourceModel\Brand\Grid\Collection
-                </item>
+                <item name="cap_brand_listing_data_source" xsi:type="string">Cap\Brand\Model\ResourceModel\Brand\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
